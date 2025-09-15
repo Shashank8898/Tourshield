@@ -12,17 +12,21 @@
   "type": "commonjs",
   "dependencies": {
     "@clerk/backend": "^2.14.0",
+    "@google/generative-ai": "^0.24.1",
     "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "express-rate-limit": "^8.1.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "node-geocoder": "^4.4.1",
+    "openai": "^5.20.3"
   },
   "devDependencies": {
     "eslint": "^9.35.0",

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser, useAuth } from '@clerk/nextjs'  // [21][22]
+import { useUser, useAuth } from '@clerk/nextjs'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Toaster, toast } from 'react-hot-toast'
 import jsPDF from 'jspdf'
@@ -14,8 +14,11 @@ import {
 
 // Main component for the Smart Route Planning page
 export default function SmartRoutePlanningPage() {
-  // State for user data (mocked for this demo)
-  const [user, setUser] = useState({ id: 'demo-user-123', name: 'Alex' })
+  // Clerk authentication hooks
+  const { user, isLoaded } = useUser()
+  const { getToken } = useAuth()
+  const router = useRouter()
+  
   // State to ensure component is mounted on the client before rendering UI
   const [mounted, setMounted] = useState(false)
   // State to hold all user inputs for the route
@@ -45,29 +48,38 @@ export default function SmartRoutePlanningPage() {
   // State for saved routes
   const [savedRoutes, setSavedRoutes] = useState([])
 
-  // const { user, isLoaded } = useUser()
-  // const { getToken } = useAuth()
-
   // Backend API base URL
   const API_BASE = 'http://localhost:5000'
 
   // Effect to handle client-side mounting
   useEffect(() => {
     setMounted(true)
-    // In a real app, you would fetch the user from sessionStorage or an auth context here
-    if (user) {
+  }, [])
+
+  // Effect to fetch saved routes when user loads
+  useEffect(() => {
+    if (user && isLoaded) {
       fetchSavedRoutes()
     }
-  }, [user])
+  }, [user, isLoaded])
 
-  // Fetch user's saved routes
+  // Redirect to sign-in if not authenticated
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push('/sign-in')
+    }
+  }, [isLoaded, user, router])
+
+  // Fetch user's saved routes with authentication
   const fetchSavedRoutes = async () => {
     if (!user) return
     
     try {
+      const token = await getToken()
       const response = await fetch(`${API_BASE}/api/routes/user/${user.id}`, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
       })
 
@@ -126,6 +138,11 @@ export default function SmartRoutePlanningPage() {
 
   // Main function to call the backend for route analysis
   const analyzeRoute = async () => {
+    if (!user) {
+      toast.error('Please sign in to analyze routes')
+      return
+    }
+
     setError(null)
     const validDestinations = routeData.destinations.filter(d => d.trim() !== '')
     if (!routeData.origin.trim() || validDestinations.length === 0) {
@@ -137,10 +154,12 @@ export default function SmartRoutePlanningPage() {
     setRouteAnalysis(null)
     
     try {
+      const token = await getToken()
       const response = await fetch(`${API_BASE}/api/routes/analyze`, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ 
           ...routeData, 
@@ -169,7 +188,7 @@ export default function SmartRoutePlanningPage() {
   // Saves the currently analyzed route via the backend
   const handleSaveRoute = async () => {
     if (!user || !routeAnalysis) {
-      toast.error('You must be logged in and have an analyzed route to save.')
+      toast.error('You must be signed in and have an analyzed route to save.')
       return
     }
 
@@ -178,10 +197,12 @@ export default function SmartRoutePlanningPage() {
 
     setIsSaving(true)
     try {
+      const token = await getToken()
       const response = await fetch(`${API_BASE}/api/routes/save`, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           ...routeData,
@@ -279,12 +300,31 @@ export default function SmartRoutePlanningPage() {
   const interestOptions = ['Historical', 'Adventure', 'Wildlife', 'Photography', 'Food', 'Spiritual', 'Beach', 'Mountains']
 
   // Loading spinner for initial page load
-  if (!mounted) {
+  if (!mounted || !isLoaded) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-cyan-400 animate-spin mx-auto mb-4" />
           <p className="text-slate-300">Loading TourShield...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Redirect message if not authenticated
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <Shield className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-2">Authentication Required</h2>
+          <p className="text-slate-300 mb-6">Please sign in to access Smart Route Planning</p>
+          <button 
+            onClick={() => router.push('/sign-in')}
+            className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg font-semibold text-white hover:shadow-lg transition-all"
+          >
+            Sign In
+          </button>
         </div>
       </div>
     )
@@ -334,7 +374,7 @@ export default function SmartRoutePlanningPage() {
                     AI-powered itinerary optimization with real-time safety analysis
                   </p>
                   <p className="text-sm text-slate-400 mt-1">
-                    Welcome back, {user.name}!
+                    Welcome back, {user.firstName || user.emailAddresses[0]?.emailAddress}!
                   </p>
                 </div>
                 <div className="flex items-center space-x-2 mt-4 sm:mt-0">
@@ -635,6 +675,7 @@ export default function SmartRoutePlanningPage() {
                       className="space-y-6"
                     >
                       
+                      
                       {/* Route Overview Card */}
                       <motion.div 
                         variants={{hidden: {opacity: 0, y: 20}, visible: {opacity: 1, y: 0}}} 
@@ -717,6 +758,67 @@ export default function SmartRoutePlanningPage() {
                           </div>
                         </div>
                       </motion.div>
+                      {/* Enhanced Safety Intelligence Section */}
+            {routeAnalysis.safetyIntelligence && (
+              <motion.div 
+                variants={{hidden: {opacity: 0, y: 20}, visible: {opacity: 1, y: 0}}} 
+                className="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6"
+              >
+                <h3 className="text-xl font-semibold mb-6 text-white flex items-center">
+                  <Shield className="w-5 h-5 mr-2 text-blue-400" />
+                  AI Safety Intelligence
+                </h3>
+                
+                {/* Origin Safety */}
+                {routeAnalysis.safetyIntelligence.originSafety && (
+                  <div className="mb-4 p-4 bg-slate-700/30 rounded-xl">
+                    <h4 className="font-semibold text-cyan-400 mb-2">Origin: {routeData.origin}</h4>
+                    <div className="flex items-center justify-between mb-2">
+                      <span>Safety Score:</span>
+                      <span className={`font-bold ${
+                        routeAnalysis.safetyIntelligence.originSafety.safetyScore >= 8 ? 'text-green-400' :
+                        routeAnalysis.safetyIntelligence.originSafety.safetyScore >= 6 ? 'text-yellow-400' : 'text-red-400'
+                      }`}>
+                        {routeAnalysis.safetyIntelligence.originSafety.safetyScore}/10
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-300">{routeAnalysis.safetyIntelligence.originSafety.overallAssessment}</p>
+                  </div>
+                )}
+    
+              {/* Destination Safety */}
+              {routeAnalysis.safetyIntelligence.destinationSafety && (
+                <div className="mb-4 p-4 bg-slate-700/30 rounded-xl">
+                  <h4 className="font-semibold text-purple-400 mb-2">Destination: {routeData.destinations[0]}</h4>
+                  <div className="flex items-center justify-between mb-2">
+                    <span>Safety Score:</span>
+                    <span className={`font-bold ${
+                      routeAnalysis.safetyIntelligence.destinationSafety.safetyScore >= 8 ? 'text-green-400' :
+                      routeAnalysis.safetyIntelligence.destinationSafety.safetyScore >= 6 ? 'text-yellow-400' : 'text-red-400'
+                    }`}>
+                      {routeAnalysis.safetyIntelligence.destinationSafety.safetyScore}/10
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-300">{routeAnalysis.safetyIntelligence.destinationSafety.overallAssessment}</p>
+                </div>
+              )}
+
+              {/* Route-Specific Risks */}
+              {routeAnalysis.safetyIntelligence.routeSpecificSafety?.routeSpecificRisks && (
+                <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
+                  <h4 className="font-semibold text-yellow-400 mb-2">Route-Specific Considerations</h4>
+                  <ul className="space-y-1">
+                    {routeAnalysis.safetyIntelligence.routeSpecificSafety.routeSpecificRisks.map((risk, i) => (
+                      <li key={i} className="text-sm text-slate-300 flex items-start">
+                        <AlertTriangle className="w-4 h-4 mr-2 mt-0.5 text-yellow-400 flex-shrink-0" />
+                        {risk}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </motion.div>
+          )}
 
                       {/* Detailed Route Breakdown Card */}
                       <motion.div 
