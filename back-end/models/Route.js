@@ -21,7 +21,7 @@ const routeSchema = new mongoose.Schema({
     destinations: [{ type: String, required: true }],
     travelMode: { 
         type: String, 
-        enum: ['driving', 'transit', 'train', 'flying'], 
+        enum: ['Car', 'Flight', 'Cruise', 'Railways'], 
         required: true 
     },
     travelDates: {

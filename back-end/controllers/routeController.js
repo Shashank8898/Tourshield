@@ -1,4 +1,10 @@
 const Route = require('../models/Route');
+const Tourist = require('../models/Tourist');
+import { Blockchain, Transaction } from './blockchain.js';
+import { generateKeyPair, signData } from './cryptoUtils.js';
+
+
+
 const { getWeatherData, getCrimeData, calculateDistance } = require('../services/routeAnalysisService');
 
 exports.analyzeRoute = async (req, res) => {
@@ -90,7 +96,7 @@ exports.analyzeRoute = async (req, res) => {
 
 exports.saveRoute = async (req, res) => {
     try {
-        const { origin, destinations, travelMode, travelDates, preferences, analysis, name } = req.body;
+        const { origin, destinations, travelMode, travelDates, name } = req.body;
         const userId = req.user.id;
 
         const route = new Route({
@@ -100,8 +106,7 @@ exports.saveRoute = async (req, res) => {
             destinations,
             travelMode,
             travelDates,
-            preferences,
-            analysis
+            
         });
 
         await route.save();
@@ -115,6 +120,46 @@ exports.saveRoute = async (req, res) => {
         });
     }
 };
+
+exports.saveTourist = async (req, res) => {
+    try{
+        const { fullName, dateOfBirth,nationality, medicalConditions, contactNumber, bloodGroup } = req.body;
+
+        // Generate issuer keys
+        const { publicKey, privateKey } = generateKeyPair();
+        
+        // Create blockchain
+        const tourChain = new Blockchain();
+        
+        const dataFingerprint = 'sha256hashofTouristData'; // In production, hash actual data
+        const signature = signData(privateKey, dataFingerprint);
+
+        const txShashank = new Transaction(
+            'did:tourshield:shashank-8891',
+            dataFingerprint,
+            publicKey,
+            signature,
+            { FullName:fullName, DateOfBirth:dateOfBirth,Nationality:nationality, MedicalConditions:medicalConditions, ContactNumber:contactNumber, BloodGroup:bloodGroup },
+            { tripId: 'trip-1234', destinationTo: 'Japan',destinationFrom: 'SwitzerLand', date: '2024-12-01' }
+        )
+
+        
+        // Add and mine transaction
+        tourChain.addTransaction(txShashank);
+        tourChain.minePendingTransactions();
+        console.log(JSON.stringify(tourChain, null, 2));
+
+
+        await Tourist.save();
+        res.status(201).json({ success: true, data: tourist });
+    } catch (error) {
+        console.error('Save route error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to save route'
+        });
+    }
+}
 
 exports.getUserRoutes = async (req, res) => {
     try {

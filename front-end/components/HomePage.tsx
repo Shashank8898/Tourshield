@@ -261,7 +261,7 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-            <Link href="/create-digital-id">
+            <Link href="/routeplanning">
               <button className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl font-bold text-lg flex items-center gap-3 hover:shadow-2xl hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-500">
                 Create Digital ID
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
