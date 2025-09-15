@@ -13,10 +13,10 @@ export default function TripFormPage() {
     destination: "",
     startDate: "",
     endDate: "",
-    tripType: "",
+    // tripType: "",
     transport: "",
-    accommodation: "",
-    activities: "" // comma-separated list
+    // accommodation: "",
+    // activities: "" // comma-separated list
   });
 
   
