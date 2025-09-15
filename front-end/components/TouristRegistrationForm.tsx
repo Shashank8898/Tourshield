@@ -1,8 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Shield, User, Calendar, Globe, Heart, Phone, Droplets, MapPin, Route, Clock, CheckCircle, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
 
 export default function TouristRegistrationForm() {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -150,7 +153,9 @@ export default function TouristRegistrationForm() {
     })
     
     alert('Registration successful! Your digital ID is being created.');
+
     setIsSubmitting(false);
+    router.push("/")
   };
 
   const generateTripId = () => {

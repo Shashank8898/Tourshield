@@ -187,44 +187,7 @@ export default function SmartRoutePlanningPage() {
   
   // Saves the currently analyzed route via the backend
   const handleSaveRoute = async () => {
-    if (!user || !routeAnalysis) {
-      toast.error('You must be signed in and have an analyzed route to save.')
-      return
-    }
-
-    const routeName = prompt('Enter a name for this route:', `Trip to ${routeData.destinations[0]}`)
-    if (!routeName) return // User cancelled
-
-    setIsSaving(true)
-    try {
-      const token = await getToken()
-      const response = await fetch(`${API_BASE}/api/routes/save`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          ...routeData,
-          analysis: routeAnalysis,
-          name: routeName
-        })
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to save route.')
-      }
-      
-      toast.success('Route saved successfully!')
-      fetchSavedRoutes() // Refresh saved routes list
-    } catch (err) {
-      console.error('Save Error:', err)
-      toast.error(err.message)
-    } finally {
-      setIsSaving(false)
-    }
+    
   }
   
   // Generates and downloads a PDF summary of the route
@@ -368,7 +331,7 @@ export default function SmartRoutePlanningPage() {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8">
                 <div>
                   <h1 className="text-3xl lg:text-4xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                    Smart Route Planning
+                    Smart Trip Planning
                   </h1>
                   <p className="text-slate-300 text-base lg:text-lg">
                     AI-powered itinerary optimization with real-time safety analysis
@@ -387,7 +350,7 @@ export default function SmartRoutePlanningPage() {
                     <Settings className="w-5 h-5" />
                   </motion.button>
                   <motion.button 
-                    onClick={handleSaveRoute} 
+                    onClick={()=>{router.push("/createtripid")}} 
                     disabled={!routeAnalysis || isSaving} 
                     whileHover={{ scale: 1.05 }} 
                     whileTap={{ scale: 0.95 }} 
@@ -398,7 +361,7 @@ export default function SmartRoutePlanningPage() {
                     ) : (
                       <Save className="w-5 h-5" />
                     )}
-                    Save Route
+                    Confirm Trip
                   </motion.button>
                 </div>
               </div>

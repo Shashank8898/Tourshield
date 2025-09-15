@@ -3,10 +3,13 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import { useUser } from "@clerk/nextjs";
 import { Shield, MapPin, Users, Phone, AlertTriangle, Eye, Brain, Globe, Lock, Smartphone, CheckCircle, ArrowRight, Zap, Heart, Star, User, Camera, Wifi, Map, Database, Bell } from 'lucide-react'
 
 export default function HomePage() {
-  const [user, setUser] = useState(null)
+  const [isUser, setUser] = useState(null)
+  const { isSignedIn, user } = useUser();
+
   const [mounted, setMounted] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
   const router = useRouter()
@@ -212,9 +215,9 @@ export default function HomePage() {
           {user ? (
             <>
               <Link href={`/${user.id}/profile`}>
-                <button className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300">
+                {/* <button className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300">
                   My Profile
-                </button>
+                </button> */}
               </Link>
               <button
                 onClick={handleLogout}
@@ -225,12 +228,12 @@ export default function HomePage() {
             </>
           ) : (
             <>
-              <Link href="/login">
+              <Link href="/sign-in">
                 <button className="px-6 py-2 text-cyan-400 hover:text-cyan-300 font-semibold transition-colors duration-300">
                   Login
                 </button>
               </Link>
-              <Link href="/register">
+              <Link href="/sign-up">
                 <button className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300">
                   Get Started
                 </button>
@@ -261,9 +264,9 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-            <Link href="/create-digital-id">
+            <Link href="/routeplanning">
               <button className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl font-bold text-lg flex items-center gap-3 hover:shadow-2xl hover:shadow-cyan-500/25 transform hover:scale-105 transition-all duration-500">
-                Create Digital ID
+                 Plan Your Trip !
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
@@ -273,9 +276,9 @@ export default function HomePage() {
                 Emergency SOS
               </button>
             </Link>
-            <Link href="/authority-dashboard">
+            <Link href="/livelocation">
               <button className="px-8 py-4 border-2 border-slate-600 hover:border-purple-400 rounded-2xl font-semibold text-lg hover:bg-slate-800/50 transform hover:scale-105 transition-all duration-300">
-                Authority Access
+                Live Location
               </button>
             </Link>
           </div>
