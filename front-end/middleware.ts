@@ -1,7 +1,7 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const publicRoutes = ["/", "/sign-in", "/sign-up"];
+const publicRoutes = ["/", "/sign-in", "/sign-up","/geofencing","/livelocation","/routeplanning", "/createtripid"];
 
 export default clerkMiddleware((auth, req) => {
   const { userId } = auth();
