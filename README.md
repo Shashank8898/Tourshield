@@ -1,5 +1,4 @@
 TourShield 🛡️
-Code is in version1 branch
 
 TourShield is a safety and security platform for tourists that integrates blockchain technology, SOS features, and trip monitoring. It ensures trusted travel by providing immutable trip records, emergency assistance, and real-time alerts.
 
