@@ -1,0 +1,19 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables
+# .env
+
+# React build folder
+client/build/
+
+# VSCode settings
+.vscode/
+
+# OS files
+.DS_Store
