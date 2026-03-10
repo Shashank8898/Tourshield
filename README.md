@@ -1,61 +1,69 @@
 TourShield 🛡️
 
-TourShield is a safety and security platform for tourists that integrates blockchain technology, SOS features, and trip monitoring. It ensures trusted travel by providing immutable trip records, emergency assistance, and real-time alerts.
+TourShield is a tourist safety and security platform designed to enhance travel protection through blockchain technology, real-time emergency support, and trip monitoring. The system creates a secure and transparent travel environment by maintaining tamper-proof trip records, providing instant emergency assistance, and enabling real-time alerts.
 
-🚀 Features
-
+🚀 Key Features
 Blockchain-Powered Records
 
-Immutable storage of tourist trip data.
+Secure and immutable storage of tourist trip data.
 
-Transparent and verifiable travel history.
+Ensures transparency and verifiable travel history.
+
+Protects trip records from tampering or unauthorized modifications.
 
 SOS Emergency Button
 
-Instantly notify selected contacts via email/WhatsApp.
+Instantly notifies selected emergency contacts via Email or WhatsApp.
 
-Sends live location and emergency message.
+Automatically shares the user’s live location along with an emergency alert message.
+
+Enables rapid response during critical situations.
 
 Trip Monitoring
 
-Add and store trip events securely.
+Allows users to record and store trip events securely.
 
-Retrieve and verify trip data with QR codes.
+Generates QR codes to verify and retrieve trip data.
+
+Maintains a chronological record of travel activities.
 
 Security & Trust
 
-Each block is hashed for integrity.
+Each block is cryptographically hashed to ensure data integrity.
 
-Prevents tampering and unauthorized changes.
+Prevents unauthorized changes to stored travel records.
 
-🛠️ Tech Stack
+Builds trust through transparent and verifiable information.
+
+🛠️ Technology Stack
 
 Frontend: React (Vite)
+Backend: Node.js with Express
+Database: MongoDB with Mongoose
+Blockchain: Custom blockchain implementation using SHA-256 hashing and Proof-of-Work
+Additional Tools: Nodemailer, QR Code Generator, Socket.io
 
-Backend: Node.js + Express
+📸 System Workflow
 
-Database: MongoDB / Mongoose
+Tourist Registration
+Users register and their data is securely stored in the system.
 
-Blockchain: Custom implementation (SHA-256 hashing, proof-of-work)
+Trip Event Recording
+Each trip event is hashed and added as a block to the blockchain.
 
-Other Tools: Nodemailer, QR Code Generator, Socket.io
+Verification Process
+QR codes are generated for specific blocks, allowing easy verification of stored trip records.
 
-📸 How It Works
+Emergency SOS
+Users can trigger an SOS alert that sends their live location and emergency message to trusted contacts.
 
-Tourist Registration → User data stored securely.
-
-Trip Events → Each event is hashed & added to blockchain.
-
-Verification → QR codes generated for specific blocks.
-
-Emergency SOS → Sends live location and message instantly.
-
-Mining Process → Proof-of-work validates new blocks.
+Mining Process
+New blocks are validated using a Proof-of-Work mechanism before being added to the blockchain.
 
 🔒 Blockchain Security
 
-Hash Integrity Check → Ensures block data hasn’t been altered.
+Hash Integrity Verification: Ensures that stored block data remains unchanged.
 
-Nonce & Proof-of-Work → Protects against malicious block injection.
+Nonce & Proof-of-Work: Protects the blockchain from malicious block injection.
 
-Transparency → Every transaction and trip event is verifiable.
+Transparency: All trip events and transactions are verifiable, ensuring trust and accountability.
