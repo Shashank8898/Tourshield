@@ -43,6 +43,9 @@ Database: MongoDB with Mongoose
 Blockchain: Custom blockchain implementation using SHA-256 hashing and Proof-of-Work
 Additional Tools: Nodemailer, QR Code Generator, Socket.io
 
+Demo Video
+https://youtu.be/2YxqpQj0ai8
+
 📸 System Workflow
 
 Tourist Registration
