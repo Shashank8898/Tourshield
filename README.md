@@ -1,72 +1,61 @@
-TourShield 🛡️
+# TourShield 🛡️
 
-TourShield is a tourist safety and security platform designed to enhance travel protection through blockchain technology, real-time emergency support, and trip monitoring. The system creates a secure and transparent travel environment by maintaining tamper-proof trip records, providing instant emergency assistance, and enabling real-time alerts.
+**TourShield** is a tourist safety platform that combines blockchain technology, real-time emergency support, and trip monitoring to create a secure, transparent travel experience.
 
-🚀 Key Features
-Blockchain-Powered Records
+---
 
-Secure and immutable storage of tourist trip data.
+## Features
 
-Ensures transparency and verifiable travel history.
+### 🔗 Blockchain-Powered Records
+- Immutable, tamper-proof storage of trip data
+- Cryptographically hashed blocks ensure data integrity
+- Verifiable travel history through transparent records
+- Proof-of-Work mechanism prevents malicious block injection
 
-Protects trip records from tampering or unauthorized modifications.
+### 🆘 SOS Emergency Button
+- Instantly notifies selected emergency contacts via Email or WhatsApp
+- Automatically shares live location with the emergency alert
+- Enables rapid response in critical situations
 
-SOS Emergency Button
+### 🗺️ Trip Monitoring
+- Securely records and stores trip events on the blockchain
+- Generates QR codes for easy trip data verification and retrieval
+- Maintains a chronological log of travel activities
 
-Instantly notifies selected emergency contacts via Email or WhatsApp.
+---
 
-Automatically shares the user’s live location along with an emergency alert message.
+## Tech Stack
 
-Enables rapid response during critical situations.
+| Layer | Technology |
+|-------|------------|
+| Frontend | React (Vite) |
+| Backend | Node.js + Express |
+| Database | MongoDB + Mongoose |
+| Blockchain | Custom SHA-256 + Proof-of-Work |
+| Notifications | Nodemailer |
+| Real-time | Socket.io |
+| Utilities | QR Code Generator |
 
-Trip Monitoring
+---
 
-Allows users to record and store trip events securely.
+## How It Works
 
-Generates QR codes to verify and retrieve trip data.
+1. **Register** — Users sign up and their data is securely stored in the system.
+2. **Record Events** — Each trip event is hashed and added as a new block to the blockchain.
+3. **Verify** — QR codes are generated per block for easy, on-demand verification.
+4. **SOS Alert** — Users trigger an alert that sends their live location and message to trusted contacts.
+5. **Mine** — New blocks are validated via Proof-of-Work before being committed to the chain.
 
-Maintains a chronological record of travel activities.
+---
 
-Security & Trust
+## Demo
 
-Each block is cryptographically hashed to ensure data integrity.
+▶️ [Watch the demo on YouTube](https://youtu.be/2YxqpQj0ai8)
 
-Prevents unauthorized changes to stored travel records.
+---
 
-Builds trust through transparent and verifiable information.
+## Security
 
-🛠️ Technology Stack
-
-Frontend: React (Vite)
-Backend: Node.js with Express
-Database: MongoDB with Mongoose
-Blockchain: Custom blockchain implementation using SHA-256 hashing and Proof-of-Work
-Additional Tools: Nodemailer, QR Code Generator, Socket.io
-
-Demo Video
-https://youtu.be/2YxqpQj0ai8
-
-📸 System Workflow
-
-Tourist Registration
-Users register and their data is securely stored in the system.
-
-Trip Event Recording
-Each trip event is hashed and added as a block to the blockchain.
-
-Verification Process
-QR codes are generated for specific blocks, allowing easy verification of stored trip records.
-
-Emergency SOS
-Users can trigger an SOS alert that sends their live location and emergency message to trusted contacts.
-
-Mining Process
-New blocks are validated using a Proof-of-Work mechanism before being added to the blockchain.
-
-🔒 Blockchain Security
-
-Hash Integrity Verification: Ensures that stored block data remains unchanged.
-
-Nonce & Proof-of-Work: Protects the blockchain from malicious block injection.
-
-Transparency: All trip events and transactions are verifiable, ensuring trust and accountability.
+- **Hash integrity** — Block data is verified against its stored hash on every read.
+- **Proof-of-Work** — Nonce-based mining prevents unauthorized block injection.
+- **Transparency** — All trip events are auditable, building trust between travelers and verifiers.
